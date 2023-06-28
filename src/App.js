@@ -1,8 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { letters, status } from './constants'
 import { Keyboard } from './Keyboard'
 import answers from './data/answers'
 import words from './data/words'
+
+const state = {
+  playing: 'playing',
+  won: 'won',
+  lost: 'lost',
+}
 
 const getRandomAnswer = () => {
   const randomIndex = Math.floor(Math.random() * answers.length)
@@ -11,6 +17,7 @@ const getRandomAnswer = () => {
 
 function App() {
   const [answer, setAnswer] = useState(() => getRandomAnswer())
+  const [gameState, setGameState] = useState(state.playing)
   const [board, setBoard] = useState([
     ['', '', '', '', ''],
     ['', '', '', '', ''],
@@ -59,13 +66,13 @@ function App() {
       newBoard[currentRow][currentCol] = letter
       return newBoard
     })
-    if(currentCol < 5) {
+    if (currentCol < 5) {
       setCurrentCol((prev) => prev + 1)
     }
   }
 
   const isValidWord = (word) => {
-    if(word.length < 5) return false
+    if (word.length < 5) return false
     return words[word.toLowerCase()]
   }
 
@@ -80,10 +87,10 @@ function App() {
   }
 
   const onDeletePress = () => {
-    if(currentCol === 0) return
+    if (currentCol === 0) return
     setBoard((prev) => {
       const newBoard = [...prev]
-      newBoard[currentRow][currentCol -1] = ''
+      newBoard[currentRow][currentCol - 1] = ''
       return newBoard
     })
 
@@ -127,6 +134,19 @@ function App() {
     })
   }
 
+  const isRowAllGreen = (row) => {
+    return row.every((cell) => cell === status.green)
+  }
+
+  // every time cellStatuses updates, check if the game is won or lost
+  useEffect(() => {
+    if (currentRow === 6) {
+      setGameState(state.lost)
+    } else if (isRowAllGreen(cellStatuses[currentRow])) {
+      setGameState(state.won)
+    }
+  }, [cellStatuses, currentRow])
+
   const updateLetterStatuses = (word) => {
     setLetterStatuses((prev) => {
       const newLetterStatuses = { ...prev }
@@ -165,7 +185,15 @@ function App() {
           )}
         </div>
       </div>
-      <Keyboard letterStatuses={letterStatuses} addLetter={addLetter} onEnterPress={onEnterPress} onDeletePress={onDeletePress} />
+      {gameState === state.lost && <p>Oops! The word was {answer}</p>}
+      {gameState === state.wom && <p>Congrats!</p>}
+      <Keyboard
+        letterStatuses={letterStatuses}
+        addLetter={addLetter}
+        onEnterPress={onEnterPress}
+        onDeletePress={onDeletePress}
+        gameDisabled={gameState !== state.playing}
+      />
     </div>
   )
 }

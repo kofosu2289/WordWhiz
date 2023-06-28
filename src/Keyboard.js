@@ -1,7 +1,7 @@
 import { keyboardLetters, status, letters } from './constants'
 import { useEffect, useCallback } from 'react'
 
-const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress }) => {
+const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress, gameDisabled }) => {
   const getKeyStyle = (letter) => {
     switch (letterStatuses[letter]) {
       case status.green:
@@ -26,6 +26,7 @@ const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress }) =>
 
   const handleKeyDown = useCallback(
     (event) => {
+      if (gameDisabled) return
       const letter = event.key.toUpperCase()
       if (letters.includes(letter)) {
         addLetter(letter)
@@ -69,7 +70,10 @@ const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress }) =>
               </button>
             ))}
             {idx === 2 && (
-              <button onClick={onDeletePress} className="h-14 w-12 flex items-center justify-center bg-gray-300 mx-[2px] text-sm font-bold rounded">
+              <button
+                onClick={onDeletePress}
+                className="h-14 w-12 flex items-center justify-center bg-gray-300 mx-[2px] text-sm font-bold rounded"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
