@@ -1,9 +1,15 @@
 import { useState } from 'react'
 import { letters, status } from './constants'
 import { Keyboard } from './Keyboard'
+import answers from './data/answers'
+
+const getRandomAnswer = () => {
+  const randomIndex = Math.floor(Math.random() * answers.length)
+  return answers[randomIndex]
+}
 
 function App() {
-  const [answer, setAnswer] = useState('THORN')
+  const [answer, setAnswer] = useState(() => getRandomAnswer())
   const [board, setBoard] = useState([
     ['', '', '', '', ''],
     ['', '', '', '', ''],
@@ -56,9 +62,9 @@ function App() {
   }
 
   const onEnterPress = () => {
-    if(currentRow === 5) return
+    if (currentRow === 5) return
     const word = board[currentRow].join('')
-    if(word.length < 5) return 
+    if (word.length < 5) return
     updateCellStatuses(word, currentRow)
     setCurrentRow((prev) => prev + 1)
     setCurrentCol(0)
@@ -69,10 +75,10 @@ function App() {
       const newCellStatuses = [...prev]
       newCellStatuses[rowNumber] = [...prev[rowNumber]]
       const wordLength = word.length
-      for(let i=0; i <wordLength; i++) {
-        if(word[i] === answer[i]) {
+      for (let i = 0; i < wordLength; i++) {
+        if (word[i] === answer[i]) {
           newCellStatuses[rowNumber][i] = status.green
-        } else if(answer.includes(word[i])) {
+        } else if (answer.includes(word[i])) {
           newCellStatuses[rowNumber][i] = status.yellow
         } else {
           newCellStatuses[rowNumber][i] = status.gray
