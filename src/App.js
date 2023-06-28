@@ -73,18 +73,37 @@ function App() {
 
   const updateCellStatuses = (word, rowNumber) => {
     setCellStatuses((prev) => {
+      let ans = answer
+      let wor = word
       const newCellStatuses = [...prev]
       newCellStatuses[rowNumber] = [...prev[rowNumber]]
-      const wordLength = word.length
+      const wordLength = wor.length
+
+      // check greens
       for (let i = 0; i < wordLength; i++) {
-        if (word[i] === answer[i]) {
+        if (wor[i] === ans[i]) {
           newCellStatuses[rowNumber][i] = status.green
-        } else if (answer.includes(word[i])) {
+          ans = ans.substr(0, i) + '.' + ans.substr(i + 1)
+          wor = wor.substr(0, i) + '.' + wor.substr(i + 1)
+        }
+      }
+
+      // check yellows
+      for (let i = 0; i < wordLength; i++) {
+        if (wor[i] === '.') continue
+
+        if (ans.includes(wor[i])) {
           newCellStatuses[rowNumber][i] = status.yellow
-        } else {
+        }
+      }
+
+      // set rest to gray
+      for (let i = 0; i < wordLength; i++) {
+        if (newCellStatuses[rowNumber][i] === status.unguessed) {
           newCellStatuses[rowNumber][i] = status.gray
         }
       }
+
       return newCellStatuses
     })
   }
@@ -93,8 +112,8 @@ function App() {
     setLetterStatuses((prev) => {
       const newLetterStatuses = { ...prev }
       const wordLength = word.length
-      for(let i = 0; i < wordLength; i++) {
-        if(word[i] === answer[i]) {
+      for (let i = 0; i < wordLength; i++) {
+        if (word[i] === answer[i]) {
           newLetterStatuses[word[i]] = status.green
         } else if (answer.includes(word[i])) {
           newLetterStatuses[word[i]] = status.yellow
