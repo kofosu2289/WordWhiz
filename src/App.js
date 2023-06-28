@@ -58,7 +58,7 @@ function App() {
       <div>
         <h1 className="text-center font-medium text-2xl my-2">Word Whiz</h1>
         <div className="flex items-center flex-col">
-          <div>
+          <div className="grid grid-rows-6 grid-flow-col gap-1">
             {board.map((row) => (
               <div className="mb-0">
                 {row.map((cell) => (
@@ -83,14 +83,31 @@ const keyboardLetters = [
 ]
 
 const Keyboard = ({ letterStatuses }) => {
+  const getKeyStyle = (letter) => {
+    switch (letterStatuses[letter]) {
+      case status.green:
+        return 'bg-green-500 text-white'
+      case status.yellow:
+        return 'bg-yellow-600 text-white'
+      case status.gray:
+        return 'bg-gray-700 text-white'
+      default:
+        return 'bg-gray-300'
+    }
+  }
+
   return (
     <div className="w-full flex flex-col items-center mb-2">
       {keyboardLetters.map((row) => (
-        <div className="my-1">
+        <div className="w-full flex justify-center my-[6px]">
           {row.map((letter) => (
-            <span className="inline-flex items-center w-8 h-12 justify-center bg-slate-300 mx-[2px] text-sm font-bold rounded-sm">
+            <button
+              className={`h-14 w-7 sm:w-10 ${getKeyStyle(
+                letter
+              )} mx-[2px] text-sm font-bold rounded`}
+            >
               {letter}
-            </span>
+            </button>
           ))}
         </div>
       ))}
