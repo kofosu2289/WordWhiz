@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { letters, status } from './constants'
-import Keyboard from './Keyboard'
+import { Keyboard } from './Keyboard'
 
 function App() {
   const [answer, setAnswer] = useState('THORN')
@@ -55,6 +55,33 @@ function App() {
     setCurrentCol((prev) => prev + 1)
   }
 
+  const onEnterPress = () => {
+    if(currentRow === 5) return
+    const word = board[currentRow].join('')
+    if(word.length < 5) return 
+    updateCellStatuses(word, currentRow)
+    setCurrentRow((prev) => prev + 1)
+    setCurrentCol(0)
+  }
+
+  const updateCellStatuses = (word, rowNumber) => {
+    setCellStatuses((prev) => {
+      const newCellStatuses = [...prev]
+      newCellStatuses[rowNumber] = [...prev[rowNumber]]
+      const wordLength = word.length
+      for(let i=0; i <wordLength; i++) {
+        if(word[i] === answer[i]) {
+          newCellStatuses[rowNumber][i] = status.green
+        } else if(answer.includes(word[i])) {
+          newCellStatuses[rowNumber][i] = status.yellow
+        } else {
+          newCellStatuses[rowNumber][i] = status.gray
+        }
+      }
+      return newCellStatuses
+    })
+  }
+
   return (
     <div className="flex flex-col justify-between h-screen">
       <h1 className="text-center font-medium text-2xl my-2">WORD WHIZ</h1>
@@ -76,7 +103,7 @@ function App() {
           )}
         </div>
       </div>
-      <Keyboard letterStatuses={letterStatuses} addLetter={addLetter} />
+      <Keyboard letterStatuses={letterStatuses} addLetter={addLetter} onEnterPress={onEnterPress} />
     </div>
   )
 }
