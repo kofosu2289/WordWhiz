@@ -62,7 +62,7 @@ function App() {
   }
 
   const onEnterPress = () => {
-    if (currentRow === 5) return
+    if (currentRow === 6) return
     const word = board[currentRow].join('')
     if (word.length < 5) return
     updateCellStatuses(word, currentRow)
