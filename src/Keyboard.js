@@ -36,7 +36,7 @@ const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress, game
         onDeletePress()
       }
     },
-    [addLetter, onEnterPress, onDeletePress]
+    [addLetter, onEnterPress, onDeletePress, gameDisabled]
   )
 
   useEffect(() => {
@@ -48,8 +48,7 @@ const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress, game
   return (
     <div className="w-full flex flex-col items-center mb-2">
       {keyboardLetters.map((row, idx) => (
-        <div className="w-full flex justify-center my-[5px]">
-          <>
+        <div key={idx} className="w-full flex justify-center my-[5px]">
             {idx === 2 && (
               <button
                 onClick={onEnterPress}
@@ -90,7 +89,6 @@ const Keyboard = ({ letterStatuses, addLetter, onEnterPress, onDeletePress, game
                 </svg>
               </button>
             )}
-          </>
         </div>
       ))}
     </div>
