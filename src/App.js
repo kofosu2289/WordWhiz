@@ -58,7 +58,9 @@ function App() {
       newBoard[currentRow][currentCol] = letter
       return newBoard
     })
-    setCurrentCol((prev) => prev + 1)
+    if(currentCol < 5) {
+      setCurrentCol((prev) => prev + 1)
+    }
   }
 
   const onEnterPress = () => {
@@ -69,6 +71,17 @@ function App() {
     updateLetterStatuses(word)
     setCurrentRow((prev) => prev + 1)
     setCurrentCol(0)
+  }
+
+  const onDeletePress = () => {
+    if(currentCol === 0) return
+    setBoard((prev) => {
+      const newBoard = [...prev]
+      newBoard[currentRow][currentCol -1] = ''
+      return newBoard
+    })
+
+    setCurrentCol((prev) => prev - 1)
   }
 
   const updateCellStatuses = (word, rowNumber) => {
@@ -146,7 +159,7 @@ function App() {
           )}
         </div>
       </div>
-      <Keyboard letterStatuses={letterStatuses} addLetter={addLetter} onEnterPress={onEnterPress} />
+      <Keyboard letterStatuses={letterStatuses} addLetter={addLetter} onEnterPress={onEnterPress} onDeletePress={onDeletePress} />
     </div>
   )
 }
