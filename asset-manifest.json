@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/WordWhiz/static/css/main.cc220188.css",
+    "main.js": "/WordWhiz/static/js/main.02764ab2.js",
+    "index.html": "/WordWhiz/index.html",
+    "main.cc220188.css.map": "/WordWhiz/static/css/main.cc220188.css.map",
+    "main.02764ab2.js.map": "/WordWhiz/static/js/main.02764ab2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cc220188.css",
+    "static/js/main.02764ab2.js"
+  ]
+}
